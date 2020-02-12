@@ -58,6 +58,10 @@ public class Bot extends TelegramLongPollingBot {
         }
     }
 
+    private String getOutputMessage(Message inputMessage) {
+        return null;
+    }
+
     @Override
     public String getBotUsername() {
         // TODO
