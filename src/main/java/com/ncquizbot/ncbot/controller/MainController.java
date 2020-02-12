@@ -56,7 +56,7 @@ public class MainController {
     public String postAddQuestion(@ModelAttribute("questionAndAnswer") QuestionAndAnswer questionAndAnswer) {
         System.out.println("postAddQuestion");
         questionService.createQuestionWithAnswers(questionAndAnswer);
-        return "redirect:/index";
+        return "redirect:/questions";
     }
 
     @GetMapping("edit/question")

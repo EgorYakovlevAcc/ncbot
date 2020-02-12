@@ -20,7 +20,6 @@
 <form th:value="questionAndAnswer" th:action="@{/questions/add}" method="post" style="width: 500px; height: 300px; border: 1px dodgerblue solid;">
     <div class="form-group">
         <label for="questionForm">question</label>
-
         <input th:field="${questionAndAnswer.content}" class="form-control" id="questionForm" type="text"/>
     </div>
     <div class="form-group">
