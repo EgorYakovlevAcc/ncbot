@@ -4,6 +4,8 @@ import com.ncquizbot.ncbot.model.Question;
 import com.ncquizbot.ncbot.model.User;
 import com.ncquizbot.ncbot.service.QuestionService;
 import com.ncquizbot.ncbot.service.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
@@ -12,10 +14,9 @@ import org.telegram.telegrambots.api.objects.Update;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
 
-import javax.validation.constraints.Null;
-
 @Component
 public class Bot extends TelegramLongPollingBot {
+    private static final Logger LOGGER = LoggerFactory.getLogger(Bot.class);
     @Autowired
     private UserService userService;
     @Autowired
@@ -45,10 +46,18 @@ public class Bot extends TelegramLongPollingBot {
                 currentQuestion = questionService.findQuestionById(questionService.findFirstQuestion().getId());
                 messageText = currentQuestion.getContent();
                 userService.setCurrentQuestionToUser(user, currentQuestion);
+//                ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
+//                replyKeyboardMarkup.setOneTimeKeyboard(true);
+//                List<KeyboardRow> keyboardRowList = new ArrayList<>();
+//                KeyboardRow keyboardRow = new KeyboardRow();
+//                keyboardRow.add("Egor");
+//                keyboardRow.add("Pomidor");
+//                keyboardRowList.add(keyboardRow);
+//                replyKeyboardMarkup.setKeyboard(keyboardRowList);
             } else {
                 currentQuestion = questionService.findQuestionById(user.getCurrentQuestionId());
-                System.out.println("message.getText(): " + message.getText());
-                System.out.println("currentQuestion.getContent(): " + currentQuestion.getAnswer().getContent());
+                LOGGER.info("message.getText(): {}", message.getText());
+                LOGGER.info("currentQuestion.getContent(): {}", currentQuestion.getAnswer().getContent());
                 if (message.getText().equals(currentQuestion.getAnswer().getContent())) {
                     userService.increaseUserScore(user);
                 }
@@ -57,10 +66,12 @@ public class Bot extends TelegramLongPollingBot {
                     messageText = questionService.findQuestionById(user.getCurrentQuestionId()).getContent();
                 } else {
                     userService.turnOffUserActivityStatus(user);
-                    userService.delete(user);
+                    userService.updateUserSessionEndDate(user);
+//                    userService.delete(user);
                     messageText = "Thank you it was last question. Your score is " + user.getScore();
                 }
             }
+            userService.updateLastUserSessionDate(user);
             return messageText;
         }
         return null;

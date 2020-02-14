@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @Table(name = "users")
@@ -24,6 +25,11 @@ public class User {
     private Integer currentQuestionId;
     private Integer score;
     private boolean isActiveNow;
+    @Column(name = "start_session")
+    private Date lastSessionDate;
+    @Column(name = "end_session")
+    private Date endSessionDate;
+
 
     @Override
     public String toString() {

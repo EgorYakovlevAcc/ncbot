@@ -21,4 +21,6 @@ public interface UserService {
     void turnOffUserActivityStatus(User user);
     void setCurrentQuestionToUser(User user, Question question);
     Question getNextQuestionForUser(User user);
+    void updateLastUserSessionDate(User user);
+    void updateUserSessionEndDate(User user);
 }

@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.telegram.telegrambots.api.objects.Chat;
 import org.telegram.telegrambots.api.objects.Message;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -93,6 +94,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void updateLastUserSessionDate(User user) {
+        user.setLastSessionDate(new Date());
+        userRepository.save(user);
+    }
+
+    @Override
     public void increaseUserScore(User user) {
         Integer currentScore = user.getScore();
         user.setScore(currentScore + 1);
@@ -118,6 +125,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public void setCurrentQuestionToUser(User user, Question question) {
         user.setCurrentQuestionId(question.getId());
+        userRepository.save(user);
+    }
+
+    public void updateUserSessionEndDate(User user){
+        user.setEndSessionDate(new Date());
         userRepository.save(user);
     }
 }

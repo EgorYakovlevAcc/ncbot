@@ -45,12 +45,28 @@
             </p>
         </td>
         <td>
-            <a th:href="@{'/edit/question&id='+ ${question.id}}">edit</a>
-            <a th:href="@{'/delete/question&id='+ ${question.id}}">delete</a>
+            <div class="wrap">
+                <div class="modal"></div>
+                <div class="header">
+                    <a th:href="@{'/edit/question&id='+ ${question.id}}">edit</a>
+                </div>
+            </div>
+            <div class="wrap">
+                <div class="modal"></div>
+                <div class="header">
+                    <a th:href="@{'/delete/question&id='+ ${question.id}}">delete</a>
+                </div>
+            </div>
         </td>
     </tr>
     </tbody>
 </table>
-<a th:href="@{questions/add}">add new question</a>
+<a href="#">режим работы</a>
+<script th:inline="javascript">
+$('a').on('click', function(e){
+e.preventDefault();
+$('.modal').toggleClass('active');
+});
+</script>
 </body>
 </html>
