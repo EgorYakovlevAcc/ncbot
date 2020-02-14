@@ -57,6 +57,7 @@ public class Bot extends TelegramLongPollingBot {
                     messageText = questionService.findQuestionById(user.getCurrentQuestionId()).getContent();
                 } else {
                     userService.turnOffUserActivityStatus(user);
+                    userService.delete(user);
                     messageText = "Thank you it was last question. Your score is " + user.getScore();
                 }
             }
