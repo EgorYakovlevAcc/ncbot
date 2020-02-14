@@ -56,8 +56,8 @@ public class Bot extends TelegramLongPollingBot {
 //                replyKeyboardMarkup.setKeyboard(keyboardRowList);
             } else {
                 currentQuestion = questionService.findQuestionById(user.getCurrentQuestionId());
-                LOGGER.info("message.getText(): {}", message.getText());
-                LOGGER.info("currentQuestion.getContent(): {}", currentQuestion.getAnswer().getContent());
+                LOGGER.error("message.getText(): {}", message.getText());
+                LOGGER.error("currentQuestion.getContent(): {}", currentQuestion.getAnswer().getContent());
                 if (message.getText().equals(currentQuestion.getAnswer().getContent())) {
                     userService.increaseUserScore(user);
                 }
