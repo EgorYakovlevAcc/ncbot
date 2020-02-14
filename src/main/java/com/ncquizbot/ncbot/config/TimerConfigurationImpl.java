@@ -13,12 +13,11 @@ import java.util.Objects;
 public class TimerConfigurationImpl implements TimerConfiguration {
     //10 minutes
     private static final Long TIME_GAP = 600000L;
-    private static final Integer FIXED_RATE_FOR_UPDATE = 60000;
 
     @Autowired
     private UserService userService;
     @Override
-    @Scheduled(fixedRate = FIXED_RATE_FOR_UPDATE)
+    @Scheduled(fixedRate = 60000)
     public void sheduleUsersSessions() {
         userService.findAll().stream().forEach(user -> {
             Date currentDate = new Date();
