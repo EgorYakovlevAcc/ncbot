@@ -12,6 +12,8 @@ import org.telegram.telegrambots.api.objects.Update;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
 
+import javax.validation.constraints.Null;
+
 @Component
 public class Bot extends TelegramLongPollingBot {
     @Autowired
@@ -22,6 +24,18 @@ public class Bot extends TelegramLongPollingBot {
     @Override
     public void onUpdateReceived(Update update) {
         System.out.println(update);
+        String messageText = getOutputMessage(update);
+        SendMessage answer = new SendMessage() // Create a SendMessage object with mandatory fields
+                .setChatId(update.getMessage().getChatId())
+                .setText(messageText);
+        try {
+            execute(answer); // Call method to send the message
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private String getOutputMessage(Update update) {
         Message message = update.getMessage();
         if (update.hasMessage() && message.hasText()) {
             String messageText = "";
@@ -41,24 +55,13 @@ public class Bot extends TelegramLongPollingBot {
                 if (!userService.checkIsThisQuestionLast(user)) {
                     userService.setNextQuestionToUser(user);
                     messageText = questionService.findQuestionById(user.getCurrentQuestionId()).getContent();
-                }
-                else {
+                } else {
                     userService.turnOffUserActivityStatus(user);
                     messageText = "Thank you it was last question. Your score is " + user.getScore();
                 }
             }
-            SendMessage answer = new SendMessage() // Create a SendMessage object with mandatory fields
-                    .setChatId(update.getMessage().getChatId())
-                    .setText(messageText);
-            try {
-                execute(answer); // Call method to send the message
-            } catch (TelegramApiException e) {
-                e.printStackTrace();
-            }
+            return messageText;
         }
-    }
-
-    private String getOutputMessage(Message inputMessage) {
         return null;
     }
 
