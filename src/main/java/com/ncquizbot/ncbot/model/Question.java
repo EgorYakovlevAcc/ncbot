@@ -23,7 +23,9 @@ public class Question {
     private Integer id;
     @Lob
     private String content;
-    @OneToOne(mappedBy = "question", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy="question")
     private Answer answer;
+    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<Option> options;
 
 }

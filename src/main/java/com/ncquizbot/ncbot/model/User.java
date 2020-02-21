@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -29,6 +30,8 @@ public class User {
     private Date lastSessionDate;
     @Column(name = "end_session")
     private Date endSessionDate;
+    @OneToMany
+    private List<QuestionAndUserAnswerNote> questionAndUserAnswerNoteList;
 
 
     @Override

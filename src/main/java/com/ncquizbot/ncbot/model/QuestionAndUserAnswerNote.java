@@ -4,23 +4,23 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 
 @Entity
-@Table(name = "answers")
-@Getter
+@Table(name = "question_answer")
 @Setter
-@AllArgsConstructor
+@Getter
 @NoArgsConstructor
-public class Answer {
+@AllArgsConstructor
+public class QuestionAndUserAnswerNote {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
-    private String content;
-    @OneToOne
-    @JoinColumn(name="question_id")
+    @ManyToOne
     private Question question;
+    @Column(name = "answer")
+    private String userAnswer;
+    @ManyToOne
+    private User user;
 }

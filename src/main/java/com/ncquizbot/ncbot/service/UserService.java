@@ -13,7 +13,7 @@ public interface UserService {
     List<User> findAll();
     void save(User user);
     void delete(User user);
-    User createAndSaveUserByTelegramMessage(Message message);
+    User createAndSaveUserByTelegramMessageIfCurrentDoesNotExist(Message message);
     boolean checkIsThisUserExists(User user);
     boolean checkIsThisQuestionLast(User user);
     void increaseUserScore(User user);

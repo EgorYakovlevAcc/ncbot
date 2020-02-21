@@ -1,6 +1,5 @@
-package com.ncquizbot.ncbot.config;
+package com.ncquizbot.ncbot.config.timer;
 
-import com.ncquizbot.ncbot.config.TimerConfiguration;
 import com.ncquizbot.ncbot.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;

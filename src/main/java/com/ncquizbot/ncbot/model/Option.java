@@ -10,17 +10,18 @@ import org.hibernate.annotations.OnDeleteAction;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "answers")
+@Table(name = "options")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Answer {
+public class Option {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
-    private String content;
-    @OneToOne
-    @JoinColumn(name="question_id")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "question_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Question question;
+    private String content;
 }

@@ -54,10 +54,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User createAndSaveUserByTelegramMessage(Message message) {
+    public User createAndSaveUserByTelegramMessageIfCurrentDoesNotExist(Message message) {
         org.telegram.telegrambots.api.objects.User telegramUser = message.getFrom();
         User u = userRepository.findUserByTelegramId(telegramUser.getId());
+        System.out.println("ROGE ROGE ROGE " + u);
         if (Objects.isNull(u)) {
+            System.out.println("efefsfsefesf");
             User user = new User();
             user.setActiveNow(true);
             user.setTelegramId(telegramUser.getId());

@@ -1,9 +1,11 @@
 package com.ncquizbot.ncbot.service.impl;
 
+import com.ncquizbot.ncbot.model.Option;
 import com.ncquizbot.ncbot.model.Question;
-import com.ncquizbot.ncbot.pojo.QuestionAndAnswer;
+import com.ncquizbot.ncbot.pojo.QuestionAndOptions;
 import com.ncquizbot.ncbot.repo.QuestionRepository;
 import com.ncquizbot.ncbot.service.AnswerService;
+import com.ncquizbot.ncbot.service.OptionService;
 import com.ncquizbot.ncbot.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,6 +22,8 @@ public class QuestionServiceImpl implements QuestionService {
     private QuestionRepository questionRepository;
     @Autowired
     private AnswerService answerService;
+    @Autowired
+    private OptionService optionService;
 
     @Override
     public Question findQuestionById(Integer id) {
@@ -42,11 +46,13 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public void createQuestionWithAnswers(QuestionAndAnswer questionAndAnswer) {
+    public void createQuestionWithOptionsAndAnswer(QuestionAndOptions questionAndOptions, Integer answerId) {
         Question question = new Question();
-        question.setContent(questionAndAnswer.getContent());
+        question.setContent(questionAndOptions.getContent());
+        String contentOfAnswer = questionAndOptions.getOptions().get(answerId);
         questionRepository.save(question);
-        answerService.createAnswersByContents(question, questionAndAnswer.getAnswer());
+        optionService.createOptionsByQuestionAndContent(question, questionAndOptions.getOptions());
+        answerService.createAnswersByContents(question, contentOfAnswer);
     }
 
     @Override
@@ -70,6 +76,17 @@ public class QuestionServiceImpl implements QuestionService {
         return questionRepository.findAll().stream()
                 .findFirst()
                 .orElse(null);
+    }
+
+    @Override
+    public void deleteQuestionById(Integer id) {
+        questionRepository.deleteById(id);
+    }
+
+    @Override
+    public void editQuestionWithOptions(QuestionAndOptions questionAndOptions, Integer questionId) {
+        Question question = questionRepository.findQuestionById(questionId);
+        optionService.createOptionsByQuestionAndContent(question, questionAndOptions.getOptions());
     }
 
 }

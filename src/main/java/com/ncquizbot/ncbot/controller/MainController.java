@@ -2,16 +2,22 @@ package com.ncquizbot.ncbot.controller;
 
 import com.ncquizbot.ncbot.model.Answer;
 import com.ncquizbot.ncbot.model.Question;
-import com.ncquizbot.ncbot.pojo.QuestionAndAnswer;
+import com.ncquizbot.ncbot.pojo.QuestionAndOptions;
 import com.ncquizbot.ncbot.service.AnswerService;
+import com.ncquizbot.ncbot.service.OptionService;
 import com.ncquizbot.ncbot.service.QuestionService;
 import com.ncquizbot.ncbot.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.thymeleaf.util.StringUtils;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Controller
@@ -20,6 +26,8 @@ public class MainController {
     private UserService userService;
     @Autowired
     private QuestionService questionService;
+    @Autowired
+    private OptionService optionService;
     @Autowired
     private AnswerService answerService;
 
@@ -47,16 +55,12 @@ public class MainController {
     @GetMapping(value = {"questions/add"})
     public String getAddQuestion(Model model) {
         System.out.println("getAddQuestion");
-        QuestionAndAnswer questionAndAnswer = new QuestionAndAnswer();
-        model.addAttribute("questionAndAnswer", questionAndAnswer);
+        if (Objects.isNull(model.getAttribute("questionAndOption"))) {
+            System.out.println("EGORKA");
+            QuestionAndOptions questionAndOptions = new QuestionAndOptions();
+            model.addAttribute("questionAndOption", questionAndOptions);
+        }
         return "add_question";
-    }
-
-    @PostMapping("questions/add")
-    public String postAddQuestion(@ModelAttribute("questionAndAnswer") QuestionAndAnswer questionAndAnswer) {
-        System.out.println("postAddQuestion");
-        questionService.createQuestionWithAnswers(questionAndAnswer);
-        return "redirect:/questions";
     }
 
     @GetMapping("edit/question")
