@@ -45,6 +45,8 @@ public class QuestionController {
             options.add("");
             questionAndOptions.setOptions(options);
             model.addAttribute("questionAndOption", questionAndOptions);
+            model.addAttribute("buttonValue", "editQuestion");
+            model.addAttribute("buttonName", "edit question");
             System.out.println(questionAndOptions.getOptions());
             return "add_question";
         } else {
@@ -70,6 +72,7 @@ public class QuestionController {
 
     @GetMapping(value = "/edit")
     public String getEditQuestion(Model model, @RequestParam("id") Integer questionId) {
+        System.out.println("EDIT EGORKA");
         Question question = questionService.findQuestionById(questionId);
         QuestionAndOptions questionAndOptions = new QuestionAndOptions();
         questionAndOptions.setContent(question.getContent());
@@ -78,6 +81,8 @@ public class QuestionController {
                 .collect(Collectors.toList());
         questionAndOptions.setOptions(optionsStr);
         model.addAttribute("questionAndOption", questionAndOptions);
+        model.addAttribute("buttonName", "edit question");
+        model.addAttribute("buttonValue", "editQuestion");
         return "add_question";
     }
 

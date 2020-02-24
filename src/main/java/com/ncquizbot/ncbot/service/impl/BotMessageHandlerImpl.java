@@ -52,10 +52,9 @@ public class BotMessageHandlerImpl implements BotMessageHandler {
                 updateUserScore(user, currentMessageText);
             }
             Question nextQuestion = getQuestionForUser(user);
-            if (Objects.isNull(nextQuestion)){
+            if (Objects.isNull(nextQuestion)) {
                 ouputMessageText = getGoodByeMessage(user);
-            }
-            else {
+            } else {
                 if (nextQuestion.getOptions().size() > 1) {
                     replyKeyboardMarkup = getQuestionWithMultipleOptions(nextQuestion.getOptions());
                 }
@@ -76,7 +75,7 @@ public class BotMessageHandlerImpl implements BotMessageHandler {
         Question lastQuestion = questionService.findQuestionById(user.getCurrentQuestionId());
         Answer answer = lastQuestion.getAnswer();
         String answerText = Objects.isNull(answer) ? "" : answer.getContent();
-        if (answerText.equals(userAnswerText)) {
+        if (checkAnswer(userAnswerText, answerText)) {
             userService.increaseUserScore(user);
         }
     }
@@ -84,7 +83,7 @@ public class BotMessageHandlerImpl implements BotMessageHandler {
     private String getGoodByeMessage(User user) {
         userService.turnOffUserActivityStatus(user);
         userService.updateUserSessionEndDate(user);
-//                    userService.delete(user);
+        userService.delete(user);
         return "Thank you it was last question. Your score is " + user.getScore();
     }
 
@@ -109,11 +108,20 @@ public class BotMessageHandlerImpl implements BotMessageHandler {
         replyKeyboardMarkup.setOneTimeKeyboard(true);
         List<KeyboardRow> keyboardRowList = new ArrayList<>();
         KeyboardRow keyboardRow = new KeyboardRow();
-        for (Option option: options){
+        for (Option option : options) {
             keyboardRow.add(option.getContent());
         }
         keyboardRowList.add(keyboardRow);
         replyKeyboardMarkup.setKeyboard(keyboardRowList);
         return replyKeyboardMarkup;
+    }
+
+    private boolean checkAnswer(String userAnswer, String answer) {
+        userAnswer = userAnswer.toLowerCase();
+        answer = answer.toLowerCase();
+        if (userAnswer.equals(answer)) {
+            return true;
+        }
+        return false;
     }
 }

@@ -20,7 +20,7 @@ public class Answer {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
     private String content;
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="question_id")
     private Question question;
 }

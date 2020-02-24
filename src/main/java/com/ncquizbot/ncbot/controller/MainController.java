@@ -1,6 +1,5 @@
 package com.ncquizbot.ncbot.controller;
 
-import com.ncquizbot.ncbot.model.Answer;
 import com.ncquizbot.ncbot.model.Question;
 import com.ncquizbot.ncbot.pojo.QuestionAndOptions;
 import com.ncquizbot.ncbot.service.AnswerService;
@@ -11,14 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.thymeleaf.util.StringUtils;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 @Controller
 public class MainController {
@@ -59,21 +53,8 @@ public class MainController {
             System.out.println("EGORKA");
             QuestionAndOptions questionAndOptions = new QuestionAndOptions();
             model.addAttribute("questionAndOption", questionAndOptions);
+            model.addAttribute("buttonValue", "createQuestion");
         }
         return "add_question";
-    }
-
-    @GetMapping("edit/question")
-    public String getEntityEditorForQuestion(Model model, @RequestParam("id") Integer id) {
-        Question question = questionService.findQuestionById(id);
-        model.addAttribute("question", question);
-        return "editor";
-    }
-
-    @GetMapping("edit/anwser")
-    public String getEntityEditorForAnswer(Model model, @RequestParam("id") Integer id) {
-                Answer answer = answerService.findAnswerById(id);
-                model.addAttribute("answer", answer);
-        return "editor";
     }
 }
