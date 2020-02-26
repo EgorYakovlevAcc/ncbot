@@ -32,6 +32,18 @@ public class QuestionController {
         model.addAttribute("questions", questions);
         return "questions";
     }
+
+    @GetMapping(value = {"/add"})
+    public String getAddQuestion(Model model) {
+        System.out.println("getAddQuestion");
+        if (Objects.isNull(model.getAttribute("questionAndOption"))) {
+            QuestionAndOptions questionAndOptions = new QuestionAndOptions();
+            model.addAttribute("questionAndOption", questionAndOptions);
+            model.addAttribute("buttonValue", "createQuestion");
+        }
+        return "add_question";
+    }
+
     @PostMapping(value = "/add", params = {"action"})
     public String postAddQuestion(@RequestParam(value = "answer_index", required = false) Integer answerIndex, @RequestParam("action") String action, ModelMap model, @ModelAttribute("questionAndOptions") QuestionAndOptions questionAndOptions) {
         if (Objects.isNull(questionAndOptions.getOptions())) {
@@ -79,7 +91,6 @@ public class QuestionController {
 
     @GetMapping(value = "/edit")
     public String getEditQuestion(Model model, @RequestParam("id") Integer questionId) {
-        System.out.println("EDIT EGORKA");
         Question question = questionService.findQuestionById(questionId);
         QuestionAndOptions questionAndOptions = new QuestionAndOptions();
         questionAndOptions.setContent(question.getContent());
