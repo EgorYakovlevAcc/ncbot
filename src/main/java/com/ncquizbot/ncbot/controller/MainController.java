@@ -18,7 +18,6 @@ import java.util.List;
 import java.util.Objects;
 
 @Controller
-@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
 public class MainController {
     @Autowired
     private UserService userService;
@@ -42,24 +41,5 @@ public class MainController {
         return "index";
     }
 
-    @GetMapping(value = {"questions"})
-    public String getQuestions(Model model) {
-        System.out.println("getQuestions");
-        List<Question> questions = questionService.findAll();
-        System.out.println(questions);
-        model.addAttribute("questions", questions);
-        return "questions";
-    }
 
-    @GetMapping(value = {"questions/add"})
-    public String getAddQuestion(Model model) {
-        System.out.println("getAddQuestion");
-        if (Objects.isNull(model.getAttribute("questionAndOption"))) {
-            System.out.println("EGORKA");
-            QuestionAndOptions questionAndOptions = new QuestionAndOptions();
-            model.addAttribute("questionAndOption", questionAndOptions);
-            model.addAttribute("buttonValue", "createQuestion");
-        }
-        return "add_question";
-    }
 }

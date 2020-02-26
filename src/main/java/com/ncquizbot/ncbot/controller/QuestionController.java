@@ -20,12 +20,18 @@ import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/questions")
-@CrossOrigin(origins = "http://localhost:4200")
 public class QuestionController {
     private static final Logger LOGGER = LoggerFactory.getLogger(QuestionController.class);
     @Autowired
     private QuestionService questionService;
 
+    @GetMapping(value = {"/all"})
+    public String getQuestions(Model model) {
+        System.out.println("getQuestions");
+        List<Question> questions = questionService.findAll();
+        model.addAttribute("questions", questions);
+        return "questions";
+    }
     @PostMapping(value = "/add", params = {"action"})
     public String postAddQuestion(@RequestParam(value = "answer_index", required = false) Integer answerIndex, @RequestParam("action") String action, ModelMap model, @ModelAttribute("questionAndOptions") QuestionAndOptions questionAndOptions) {
         if (Objects.isNull(questionAndOptions.getOptions())) {
