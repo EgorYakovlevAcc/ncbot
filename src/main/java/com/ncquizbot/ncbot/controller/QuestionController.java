@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/questions")
+@CrossOrigin(origins = "http://localhost:4200")
 public class QuestionController {
     private static final Logger LOGGER = LoggerFactory.getLogger(QuestionController.class);
     @Autowired
