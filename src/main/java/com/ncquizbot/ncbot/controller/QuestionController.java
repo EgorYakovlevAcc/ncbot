@@ -55,7 +55,7 @@ public class QuestionController {
                     .filter(StringUtils::isEmpty)
                     .collect(Collectors.toList()));
             questionService.createQuestionWithOptionsAndAnswer(questionAndOptions, answerIndex);
-            return "redirect:/questions";
+            return "redirect:/questions/all";
         }
         if (action.equals("addOption")) {
             System.out.println("Egor");

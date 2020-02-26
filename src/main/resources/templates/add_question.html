@@ -30,7 +30,6 @@
         </tr>
         <tr th:each="option, optionStat: *{questionAndOption.options}">
             <td>
-                egorka
                 <input type="radio" th:name="answer_index" th:value="${optionStat.index}"/>
             </td>
             <td>
