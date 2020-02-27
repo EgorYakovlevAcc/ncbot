@@ -1,7 +1,9 @@
 package com.ncquizbot.ncbot.service;
 
+import com.ncquizbot.ncbot.model.Answer;
 import com.ncquizbot.ncbot.model.Question;
 import com.ncquizbot.ncbot.pojo.QuestionAndOptions;
+import com.ncquizbot.ncbot.pojo.QuestionOptionsAnswer;
 
 import java.util.List;
 
@@ -10,10 +12,11 @@ public interface QuestionService {
     List<Question> findAll();
     void save(Question question);
     void delete(Question question);
-    void createQuestionWithOptionsAndAnswer(QuestionAndOptions questionAndOptions, Integer answerId);
+    void createQuestionWithOptionsAndAnswer(QuestionOptionsAnswer questionOptionsAnswer);
     Question getNextQuestion(Integer currentQuestionId);
     Question findFirstQuestion();
     void deleteQuestionById(Integer id);
-
+    QuestionOptionsAnswer convertQuestionToQuestionWithOptions(Question question);
+    Integer getCorrectIndexOfOptionByAnswer(Question question, Answer answer);
     void editQuestionWithOptions(QuestionAndOptions questionAndOptions, Integer questionId);
 }

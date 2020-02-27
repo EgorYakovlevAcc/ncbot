@@ -33,4 +33,10 @@ public class OptionServiceImpl implements OptionService {
             optionRepository.save(option);
         }
     }
+
+    @Override
+    public Integer getCorrectIndexOfOptionByAnswer(String answerStr) {
+        return null;
+    }
+
 }

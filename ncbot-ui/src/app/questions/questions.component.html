@@ -1,0 +1,41 @@
+<div>
+  <table class="table table-bordered">
+    <thead>
+    <tr>
+      <th>
+        №
+      </th>
+      <th>
+        content
+      </th>
+      <th>
+        options
+      </th>
+      <th>
+        answer
+      </th>
+    </tr>
+    </thead>
+    <tbody *ngFor="let question of questions; let i = index">
+    <tr>
+      <td>
+        {{i}}
+      </td>
+      <td>
+        {{question.content}}
+      </td>
+      <td>
+        <ul *ngFor="let option of question.options">
+          <li>
+            {{option.content}}
+          </li>
+        </ul>
+      </td>
+      <td>
+        {{question.answer}}
+      </td>
+    </tr>
+    </tbody>
+  </table>
+  <button type="button" (click)="openCreationNewQuestionForm()" class="btn btn-primary btn-lg btn-block">add new question</button>
+</div>

@@ -9,4 +9,5 @@ public interface OptionService {
     Option findOptionById(Integer id);
     List<Option> findOptionByQuestion(Question question);
     void createOptionsByQuestionAndContent(Question question, List<String> contents);
+    Integer getCorrectIndexOfOptionByAnswer(String answerStr);
 }

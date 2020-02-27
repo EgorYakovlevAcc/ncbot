@@ -1,8 +1,10 @@
 package com.ncquizbot.ncbot.service.impl;
 
-import com.ncquizbot.ncbot.model.Option;
+import com.ncquizbot.ncbot.model.Answer;
 import com.ncquizbot.ncbot.model.Question;
+import com.ncquizbot.ncbot.pojo.Option;
 import com.ncquizbot.ncbot.pojo.QuestionAndOptions;
+import com.ncquizbot.ncbot.pojo.QuestionOptionsAnswer;
 import com.ncquizbot.ncbot.repo.QuestionRepository;
 import com.ncquizbot.ncbot.service.AnswerService;
 import com.ncquizbot.ncbot.service.OptionService;
@@ -46,12 +48,15 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public void createQuestionWithOptionsAndAnswer(QuestionAndOptions questionAndOptions, Integer answerId) {
+    public void createQuestionWithOptionsAndAnswer(QuestionOptionsAnswer questionOptionsAnswer) {
         Question question = new Question();
-        question.setContent(questionAndOptions.getContent());
-        String contentOfAnswer = questionAndOptions.getOptions().get(answerId);
+        System.out.println("EGORKA = " + questionOptionsAnswer.getContent());
+        question.setContent(questionOptionsAnswer.getContent());
+        String contentOfAnswer = questionOptionsAnswer.getAnswer();
         questionRepository.save(question);
-        optionService.createOptionsByQuestionAndContent(question, questionAndOptions.getOptions());
+        optionService.createOptionsByQuestionAndContent(question, questionOptionsAnswer.getOptions().stream()
+                .map(opt -> opt.getContent())
+                .collect(Collectors.toList()));
         answerService.createAnswersByContents(question, contentOfAnswer);
     }
 
@@ -81,6 +86,23 @@ public class QuestionServiceImpl implements QuestionService {
     @Override
     public void deleteQuestionById(Integer id) {
         questionRepository.deleteById(id);
+    }
+
+    @Override
+    public QuestionOptionsAnswer convertQuestionToQuestionWithOptions(Question question) {
+        QuestionOptionsAnswer questionOptionsAnswer = new QuestionOptionsAnswer();
+        questionOptionsAnswer.setOptions(question.getOptions().stream()
+                .map(option -> option.getContent())
+                .map(optionContent -> new Option(optionContent))
+                .collect(Collectors.toList()));
+        questionOptionsAnswer.setContent(question.getContent());
+        questionOptionsAnswer.setAnswer(question.getAnswer().getContent());
+        return questionOptionsAnswer;
+    }
+
+    @Override
+    public Integer getCorrectIndexOfOptionByAnswer(Question question, Answer answer) {
+        return null;
     }
 
     @Override

@@ -1,0 +1,36 @@
+<div class="modal-header">
+  <h4 class="modal-title">add new question</h4>
+  <button type="button" class="close" aria-label="Close" (click)="modalForm.dismiss('Cross click')">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+    <table>
+      <tbody>
+      <td>
+        <tr>
+          <label for="question__input">
+            question
+          </label>
+          <input type="text" [(ngModel)]="question.content" id="question__input"/>
+        </tr>
+        <tr *ngFor="let option of this.question.options; let i = index">
+          <label>
+            option
+          </label>
+          <input [(ngModel)]="option.content" type="text"/>
+          <label>
+            is true
+          </label>
+
+          <input type="radio" name="is_true" value="{{i}}" [(ngModel)]="indexOfTrueOption"/>
+        </tr>
+      </td>
+      </tbody>
+    </table>
+
+</div>
+<div class="modal-footer">
+  <button type="submit" class="btn btn-primary" (click)="addOptionToQuestion()">add option</button>
+  <button type="submit" class="btn btn-primary" (click)="saveQuestion()">save question</button>
+</div>

@@ -1,8 +1,6 @@
 package com.ncquizbot.ncbot.controller;
 
-import com.ncquizbot.ncbot.model.Question;
 import com.ncquizbot.ncbot.model.User;
-import com.ncquizbot.ncbot.pojo.QuestionAndOptions;
 import com.ncquizbot.ncbot.service.AnswerService;
 import com.ncquizbot.ncbot.service.OptionService;
 import com.ncquizbot.ncbot.service.QuestionService;
@@ -15,9 +13,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
-import java.util.Objects;
 
 @Controller
+@CrossOrigin
 public class MainController {
     @Autowired
     private UserService userService;
