@@ -1,4 +1,7 @@
 <div>
+  <button type="button" (click)="openCreationNewQuestionForm()" class="btn btn-primary btn-lg btn-block"
+          style="margin: 20px 0 20px 0">add new question
+  </button>
   <table class="table table-bordered">
     <thead>
     <tr>
@@ -14,10 +17,13 @@
       <th>
         answer
       </th>
+      <th>
+        actions
+      </th>
     </tr>
     </thead>
     <tbody *ngFor="let question of questions; let i = index">
-    <tr>
+    <tr id="'tr__' + {{i}}">
       <td>
         {{i}}
       </td>
@@ -34,8 +40,19 @@
       <td>
         {{question.answer}}
       </td>
+      <td>
+        <div class="container">
+          <div class="row" style="text-align: center">
+            <div class="col">
+              <button class="btn btn-primary" (click)="editQuestion(question)">edit</button>
+            </div>
+            <div class="col">
+              <button class="btn btn-danger" (click)="deleteQuestion(question.id)">delete</button>
+            </div>
+          </div>
+        </div>
+      </td>
     </tr>
     </tbody>
   </table>
-  <button type="button" (click)="openCreationNewQuestionForm()" class="btn btn-primary btn-lg btn-block">add new question</button>
 </div>

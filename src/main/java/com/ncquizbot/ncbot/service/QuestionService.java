@@ -18,5 +18,5 @@ public interface QuestionService {
     void deleteQuestionById(Integer id);
     QuestionOptionsAnswer convertQuestionToQuestionWithOptions(Question question);
     Integer getCorrectIndexOfOptionByAnswer(Question question, Answer answer);
-    void editQuestionWithOptions(QuestionAndOptions questionAndOptions, Integer questionId);
+    void editQuestionWithOptions(QuestionOptionsAnswer questionOptionsAnswer);
 }

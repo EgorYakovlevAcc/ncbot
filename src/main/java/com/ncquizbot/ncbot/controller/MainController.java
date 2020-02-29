@@ -29,7 +29,6 @@ public class MainController {
     @GetMapping("/users")
     @ResponseBody
     public List<User> getShowUsers(Model model) {
-        System.out.println("EGORKA-POMIDORKA-DORKA");
        return userService.findAll();
     }
 

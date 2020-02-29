@@ -1,8 +1,8 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {NgbModal, NgbActiveModal} from "@ng-bootstrap/ng-bootstrap";
-import {Question} from "../question";
-import {Option} from "../option";
-import {QuestionServiceService} from "../question-service.service";
+import {Question} from "../model/question/question";
+import {Option} from "../model/option/option";
+import {QuestionServiceService} from "../service/question-service.service";
 
 
 @Component({
@@ -11,13 +11,17 @@ import {QuestionServiceService} from "../question-service.service";
   styleUrls: ['./modal-add-question.component.css']
 })
 export class ModalAddQuestionComponent implements OnInit {
+  @Input() editQuestion:Question;
   modalForm: NgbActiveModal;
   indexOfTrueOption:number;
+  isQuestionChanged:boolean;
   question: Question = {
+    id:0,
     content: '',
     options: [],
     answer: ''
   };
+
 
   constructor(private modalService: NgbModal, private modal: NgbActiveModal, private questionService: QuestionServiceService) {
     this.modalForm = modal;
@@ -25,6 +29,13 @@ export class ModalAddQuestionComponent implements OnInit {
 
 
   ngOnInit(): void {
+    if (this.editQuestion != null) {
+      this.isQuestionChanged = true;
+      this.question = this.editQuestion;
+    }
+    else  {
+      this.isQuestionChanged = false;
+    }
   }
 
   saveQuestion() {
@@ -35,7 +46,7 @@ export class ModalAddQuestionComponent implements OnInit {
       }
       i++;
     }
-    this.questionService.sendQuestion(this.question).subscribe(result => {
+    this.questionService.sendQuestion(this.question, this.isQuestionChanged).subscribe(result => {
         location.reload();
       },
       error => {

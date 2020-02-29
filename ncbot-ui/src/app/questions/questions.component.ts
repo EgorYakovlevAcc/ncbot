@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
-import {Question} from "../question";
-import {QuestionServiceService} from "../question-service.service";
-import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import {Question} from "../model/question/question";
+import {QuestionServiceService} from "../service/question-service.service";
+import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {ModalAddQuestionComponent} from "../modal-add-question/modal-add-question.component";
 
 @Component({
@@ -22,6 +22,19 @@ export class QuestionsComponent implements OnInit {
   }
 
   openCreationNewQuestionForm(){
-    this.modalService.open(ModalAddQuestionComponent)
+    this.modalService.open(ModalAddQuestionComponent);
+  }
+
+  deleteQuestion(id){
+    this.questionService.deleteQuestion(id).subscribe(result => {
+      location.reload();
+    }, error => {
+      alert("Error");
+    });
+  }
+
+  editQuestion(q:Question){
+    let modalForm = this.modalService.open(ModalAddQuestionComponent);
+    modalForm.componentInstance.editQuestion = q;
   }
 }

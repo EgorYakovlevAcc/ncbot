@@ -12,6 +12,7 @@ import java.util.List;
 @Getter
 @Setter
 public class QuestionOptionsAnswer {
+    private Integer id;
     private String content;
     private List<Option> options;
     private String answer;

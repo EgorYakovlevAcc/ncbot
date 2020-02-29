@@ -1,8 +1,10 @@
 package com.ncquizbot.ncbot.controller;
 
 import com.ncquizbot.ncbot.model.Question;
+import com.ncquizbot.ncbot.pojo.Option;
 import com.ncquizbot.ncbot.pojo.QuestionAndOptions;
 import com.ncquizbot.ncbot.pojo.QuestionOptionsAnswer;
+import com.ncquizbot.ncbot.service.OptionService;
 import com.ncquizbot.ncbot.service.QuestionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,6 +29,8 @@ public class QuestionController {
     private static final Logger LOGGER = LoggerFactory.getLogger(QuestionController.class);
     @Autowired
     private QuestionService questionService;
+    @Autowired
+    private OptionService optionService;
 
     @GetMapping(value = {"/all"})
     public String getQuestions(Model model) {
@@ -107,29 +111,28 @@ public class QuestionController {
 //    }
 
     @GetMapping(value = "/edit")
-    public String getEditQuestion(Model model, @RequestParam("id") Integer questionId) {
+    @ResponseBody
+    public QuestionOptionsAnswer getEditQuestion(Model model, @RequestParam("id") Integer questionId) {
         Question question = questionService.findQuestionById(questionId);
-        QuestionAndOptions questionAndOptions = new QuestionAndOptions();
-        questionAndOptions.setContent(question.getContent());
-        List<String> optionsStr = question.getOptions().stream()
-                .map(option -> option.getContent())
+        QuestionOptionsAnswer questionOptionsAndAnswer = new QuestionOptionsAnswer();
+        questionOptionsAndAnswer.setContent(question.getContent());
+        List<Option> optionsPojo = question.getOptions().stream()
+                .map(option -> optionService.convertOptionModelToOptionPojo(option))
                 .collect(Collectors.toList());
-        questionAndOptions.setOptions(optionsStr);
-        model.addAttribute("questionAndOption", questionAndOptions);
-        model.addAttribute("buttonName", "edit question");
-        model.addAttribute("buttonValue", "editQuestion");
-        return "add_question";
+        questionOptionsAndAnswer.setOptions(optionsPojo);
+        return questionOptionsAndAnswer;
     }
 
     @PostMapping(value = "/edit")
-    public String postEditQuestion(Model model, @RequestParam("id") Integer questionId, @ModelAttribute("questionAndOption") QuestionAndOptions questionAndOptions) {
-        questionService.editQuestionWithOptions(questionAndOptions, questionId);
-        return "questions";
+    public ResponseEntity postEditQuestion(@RequestBody QuestionOptionsAnswer questionOptionsAnswer) {
+        System.out.println(questionOptionsAnswer.getId());
+        questionService.editQuestionWithOptions(questionOptionsAnswer);
+        return ResponseEntity.ok(null);
     }
 
     @GetMapping(value = "/remove")
-    public String editQuestion(Model model, @RequestParam("id") Integer questionId) {
+    public ResponseEntity editQuestion(Model model, @RequestParam("id") Integer questionId) {
         questionService.deleteQuestionById(questionId);
-        return "questions";
+        return ResponseEntity.ok(null);
     }
 }

@@ -3,7 +3,6 @@ package com.ncquizbot.ncbot.service.impl;
 import com.ncquizbot.ncbot.model.Answer;
 import com.ncquizbot.ncbot.model.Question;
 import com.ncquizbot.ncbot.pojo.Option;
-import com.ncquizbot.ncbot.pojo.QuestionAndOptions;
 import com.ncquizbot.ncbot.pojo.QuestionOptionsAnswer;
 import com.ncquizbot.ncbot.repo.QuestionRepository;
 import com.ncquizbot.ncbot.service.AnswerService;
@@ -54,7 +53,7 @@ public class QuestionServiceImpl implements QuestionService {
         question.setContent(questionOptionsAnswer.getContent());
         String contentOfAnswer = questionOptionsAnswer.getAnswer();
         questionRepository.save(question);
-        optionService.createOptionsByQuestionAndContent(question, questionOptionsAnswer.getOptions().stream()
+        optionService.createOptionsByQuestionAndContents(question.getId(), questionOptionsAnswer.getOptions().stream()
                 .map(opt -> opt.getContent())
                 .collect(Collectors.toList()));
         answerService.createAnswersByContents(question, contentOfAnswer);
@@ -70,8 +69,7 @@ public class QuestionServiceImpl implements QuestionService {
         if ((currentQuestionIndex < questions.size() - 1) && (Objects.nonNull(currentQuestionId))) {
             Question question = questions.get(currentQuestionIndex + 1);
             return question;
-        }
-        else {
+        } else {
             return null;
         }
     }
@@ -95,6 +93,7 @@ public class QuestionServiceImpl implements QuestionService {
                 .map(option -> option.getContent())
                 .map(optionContent -> new Option(optionContent))
                 .collect(Collectors.toList()));
+        questionOptionsAnswer.setId(question.getId());
         questionOptionsAnswer.setContent(question.getContent());
         questionOptionsAnswer.setAnswer(question.getAnswer().getContent());
         return questionOptionsAnswer;
@@ -106,9 +105,13 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public void editQuestionWithOptions(QuestionAndOptions questionAndOptions, Integer questionId) {
-        Question question = questionRepository.findQuestionById(questionId);
-        optionService.createOptionsByQuestionAndContent(question, questionAndOptions.getOptions());
+    public void editQuestionWithOptions(QuestionOptionsAnswer questionOptionsAnswer) {
+        Question question = questionRepository.findQuestionById(questionOptionsAnswer.getId());
+        question.setContent(questionOptionsAnswer.getContent());
+        question.getAnswer().setContent(questionOptionsAnswer.getAnswer());
+        optionService.editOptionsByQuestionAndContents(questionOptionsAnswer.getId(), questionOptionsAnswer.getOptions().stream()
+                .map(option -> option.getContent())
+                .collect(Collectors.toList()));
     }
 
 }

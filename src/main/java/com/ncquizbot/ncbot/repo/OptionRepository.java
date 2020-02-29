@@ -9,4 +9,5 @@ import java.util.List;
 public interface OptionRepository extends JpaRepository<Option, Integer> {
     Option findOptionById(Integer id);
     List<Option> findOptionByQuestion(Question question);
+    void deleteOptionsByQuestion(Question question);
 }
